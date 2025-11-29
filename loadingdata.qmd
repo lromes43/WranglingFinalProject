@@ -78,3 +78,32 @@ Need to swap from wide to long so can add sector column
 test_melt = pd.melt(new, id_vars='Date', var_name='Ticker')
 ```
 
+Adding a new column called sector that identifies the sector which each ticker is in and then adding sector names in.
+```{python}
+test_melt['Sector'] = [None] * len(test_melt)
+
+# Pulling down sector list from above for reference: 
+Healthcare_stocks = ['LLY', 'JNJ', 'UNH', 'MRK', 'ABT'] 
+Energy_stocks = ['XOM', 'CVX', 'COP', 'WMB', 'EPD']
+Technology_stocks = ['NVDA', 'AAPL', 'MSFT', 'AVGO', 'ORCL']
+Consumer_Cylical_stocks = ['AMZN', 'TSLA', 'HD','MCD', 'TJX' ]
+Financial_Services_stocks = ['BRK-B', 'JPM', 'V', 'BAC', 'MA']
+
+for i in range(0, len(test_melt)):
+    current_ticker = test_melt['Ticker'].iloc[i]
+
+    if current_ticker in Healthcare_stocks:
+        test_melt.loc[i, "Sector "] = "Health_Care"
+    elif current_ticker in Energy_stocks:
+        test_melt.loc[i, "Sector"] = "Energy"
+    elif current_ticker in Technology_stocks:
+        test_melt.loc[i, "Sector"] = "Technology"
+    elif current_ticker in Consumer_Cylical_stocks:
+        test_melt.loc[i, "Sector"] = "Consumer_Cylical"
+    else:
+        test_melt.loc[i, "Sector"] = "Financial_Services"
+
+new_melt = test_melt.drop(test_melt.columns[-1], axis = 1)
+
+```
+
