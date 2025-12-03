@@ -37,6 +37,36 @@ this so I would be able to create new columns in the original data that
 indicates the number of instances each keyword is mentioned in each
 video/job.
 
+``` python
+merged_data = pd.merge(channels, videos, how = 'inner', on = 'channel_id')
+merged_data['publish_date'] = pd.to_datetime(merged_data['published_at'])
+merged_data['publish_year_month'] = merged_data['publish_date'].dt.to_period('M')
+
+
+
+specific_keywords = {
+    'Python': r'\bPython\b',
+    'AI_ML': r'\b(AI|Artificial Intelligence|Machine Learning|ML|Deep Learning)\b',
+    'Frontend': r'\b(HTML|CSS|JavaScript|React|Angular|Vue)\b',
+    'SQL_DB': r'\b(SQL|Database|MySQL|Postgres|NoSQL)\b'
+}
+
+for skill, pattern in specific_keywords.items():
+    merged_data[f'has_{skill.lower()}'] = (
+        merged_data['description'].str.contains(pattern, case=False, regex=True) |
+        merged_data['title'].str.contains(pattern, case=False, regex=True)
+    ).astype(int)
+
+
+print(merged_data[['published_at', 'title', 'has_python', 'has_ai_ml', 'has_frontend']].head())
+
+
+for skill, pattern in specific_keywords.items():
+    jobs[f'has_{skill.lower()}'] = (
+        jobs['skills'].str.contains(pattern, case=False, regex=True, na=False) 
+    ).astype(int)
+```
+
                published_at                                              title  \
     0  2025-11-18T22:47:05Z                       Most Important LTTStore Step   
     1  2025-11-18T19:20:33Z      This TV Factory is the Coolest I’ve Ever Seen   
@@ -212,7 +242,7 @@ model.summary()
 | Model:            | OLS              | Adj. R-squared:     | -0.002    |
 | Method:           | Least Squares    | F-statistic:        | 0.4487    |
 | Date:             | Wed, 03 Dec 2025 | Prob (F-statistic): | 0.773     |
-| Time:             | 15:38:05         | Log-Likelihood:     | -20886.   |
+| Time:             | 15:38:56         | Log-Likelihood:     | -20886.   |
 | No. Observations: | 1300             | AIC:                | 4.178e+04 |
 | Df Residuals:     | 1295             | BIC:                | 4.181e+04 |
 | Df Model:         | 4                |                     |           |

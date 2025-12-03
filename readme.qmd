@@ -31,7 +31,6 @@ Creating a new df called merged_data which merges the invidual youtube channels 
 I also created a dictionary of skills in the technology industry. I did this so I would be able to create new columns in the original data that indicates the number of instances each keyword is mentioned in each video/job.
 
 ```{python}
-#| echo: false
 #| #| messages: false
 #| warnings: false
 merged_data = pd.merge(channels, videos, how = 'inner', on = 'channel_id')
