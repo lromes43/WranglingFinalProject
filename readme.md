@@ -67,36 +67,6 @@ this so I would be able to create new columns in the original data that
 indicates the number of instances each keyword is mentioned in each
 video/job.
 
-``` python
-merged_data = pd.merge(channels, videos, how = 'inner', on = 'channel_id')
-merged_data['publish_date'] = pd.to_datetime(merged_data['published_at'])
-merged_data['publish_year_month'] = merged_data['publish_date'].dt.to_period('M')
-
-
-
-specific_keywords = {
-    'Python': r'\bPython\b',
-    'AI_ML': r'\b(AI|Artificial Intelligence|Machine Learning|ML|Deep Learning)\b',
-    'Frontend': r'\b(HTML|CSS|JavaScript|React|Angular|Vue)\b',
-    'SQL_DB': r'\b(SQL|Database|MySQL|Postgres|NoSQL)\b'
-}
-
-for skill, pattern in specific_keywords.items():
-    merged_data[f'has_{skill.lower()}'] = (
-        merged_data['description'].str.contains(pattern, case=False, regex=True) |
-        merged_data['title'].str.contains(pattern, case=False, regex=True)
-    ).astype(int)
-
-
-print(merged_data[['published_at', 'title', 'has_python', 'has_ai_ml', 'has_frontend']].head())
-
-
-for skill, pattern in specific_keywords.items():
-    jobs[f'has_{skill.lower()}'] = (
-        jobs['skills'].str.contains(pattern, case=False, regex=True, na=False) 
-    ).astype(int)
-```
-
                published_at                                              title  \
     0  2025-11-18T22:47:05Z                       Most Important LTTStore Step   
     1  2025-11-18T19:20:33Z      This TV Factory is the Coolest I’ve Ever Seen   
@@ -119,108 +89,6 @@ December 3, 2017 so this was used as my baseline. I then used the
 postdate variable which included how long the job had been posted to
 find the initial job posting date.
 
-``` python
-postdate_oneday = [
-    '1 hour ago', '1 week ago', '7 hours ago', '6 hours ago', '5 hours ago', '8 hours ago', 
-    '22 hours ago', '24 hours ago', '23 hours ago', '21 hours ago', '20 minutes ago', 
-    '20 hours ago', '18 hours ago', '19 hours ago', '17 hours ago', '2 hours ago', 
-    '23 minutes ago', '24 minutes ago', '27 minutes ago', '30 minutes ago', '31 minutes ago', 
-    '13 minutes ago', '3 hours ago', '4 hours ago', '10 minutes ago', '26 minutes ago', 
-    '9 minutes ago', '45 minutes ago', '16 hours ago', '47 minutes ago', '46 minutes ago', 
-    '13 hours ago', '49 minutes ago', '14 hours ago', '11 hours ago', '5 minutes ago', 
-    '50 minutes ago', '51 minutes ago', '52 minutes ago', '53 minutes ago', '10 hours ago', 
-    '15 hours ago', '54 minutes ago', '9 hours ago', '12 minutes ago', '57 minutes ago', 
-    '42 minutes ago', '59 minutes ago', '17 minutes ago', '12 hours ago', '6 minutes ago', 
-    '8 minutes ago', '16 minutes ago', '21 minutes ago', '32 minutes ago', '15 minutes ago', 
-    '7 minutes ago', '38 minutes ago', '22 minutes ago', 'moments ago', '11 minutes ago', 
-    '41 minutes ago', '14 minutes ago', '29 minutes ago', '28 minutes ago', '19 minutes ago', 
-    '35 minutes ago', '37 minutes ago', '39 minutes ago', '55 minutes ago', '40 minutes ago', 
-    '44 minutes ago', '43 minutes ago', '48 minutes ago','58 minutes ago', '33 minutes ago', '60 minutes ago', 
-    '34 minutes ago', '18 minutes ago', '25 minutes ago', '36 minutes ago', '56 minutes ago'
-]
-
-jobs['date'] = np.nan
-
-mask = jobs['postdate'].isin(postdate_oneday)
-
-jobs.loc[mask, 'date'] = '2017-12-03'
-
-postdate_twoweeks = [
-    '2 weeks ago'
-]
-
-mask = jobs['postdate'].isin(postdate_twoweeks)
-
-jobs.loc[mask, 'date'] = '2017-11-19'
-
-
-postdate_oneday2 = [
-    '1 day ago'
-]
-
-mask = jobs['postdate'].isin(postdate_oneday2)
-
-jobs.loc[mask, 'date'] = '2017-12-02'
-
-postdate_threeweeks = [
-    '3 weeks ago'
-]
-
-mask = jobs['postdate'].isin(postdate_threeweeks)
-
-jobs.loc[mask, 'date'] = '2017-11-12'
-
-postdate_2days= [
-    '2 days ago'
-]
-
-mask = jobs['postdate'].isin(postdate_2days)
-
-jobs.loc[mask, 'date'] = '2017-12-01'
-
-postdate_1week= [
-    '7 days ago'
-]
-
-mask = jobs['postdate'].isin(postdate_1week)
-
-jobs.loc[mask, 'date'] = '2017-11-26'
-
-postdate_6days= [
-    '6 days ago'
-]
-
-mask = jobs['postdate'].isin(postdate_6days)
-
-jobs.loc[mask, 'date'] = '2017-11-27'
-
-
-postdate_3days= [
-    '3 days ago'
-]
-
-mask = jobs['postdate'].isin(postdate_3days)
-
-jobs.loc[mask, 'date'] = '2017-11-30'
-
-postdate_4weeks= [
-    '4 weeks ago'
-]
-
-mask = jobs['postdate'].isin(postdate_4weeks)
-
-jobs.loc[mask, 'date'] = '2017-11-05'
-
-
-postdate_1month= [
-    '1 month ago'
-]
-
-mask = jobs['postdate'].isin(postdate_1month)
-
-jobs.loc[mask, 'date'] = '2017-11-03'
-```
-
 ## Making Copies of Data
 
 I made a copy of each df, merged_data and jobs. This was done so I could
@@ -228,29 +96,11 @@ reset the index allowing for comparisons to be made between the two
 datasets. I also added a new column called technical skill which is the
 sum of the skills columns.
 
-``` python
-merged_data['technical_skill'] = merged_data['has_python'] + merged_data['has_ai_ml'] + merged_data['has_frontend'] + merged_data['has_sql_db']
-merged_data_new = merged_data.copy()
-merged_data_new = merged_data_new.reset_index(names= ['Date'])
-
-
-jobs['technical_skill'] = jobs['has_python'] + jobs['has_ai_ml'] + jobs['has_frontend'] + jobs['has_sql_db']
-jobs_new = jobs.copy()
-jobs_new  = jobs_new .reset_index(names= ['Date'])
-```
-
 ## Question 1: I want to know is there a relationship between date and technical skill? Are the occurence of the technical keywords in the video descriptions related to time? Do they increase together?
 
 I solved this by doing a simple correlation test. This returned a matrix
 so I indexed to find the correlation coefficient in the matrix that
 represents the relationship between keywords and date.
-
-``` python
-corr1 = np.corrcoef(merged_data_new['Date'], merged_data_new['technical_skill'])
-corr1 = corr1[1,0]
-
-print(f"Correlation coefficient between youtube videos and date is: {corr1:.3f}")
-```
 
     Correlation coefficient between youtube videos and date is: 0.119
 
@@ -274,12 +124,6 @@ I solved this by doing a simple correlation test. This returned a matrix
 so I indexed to find the correlation coefficient in the matrix that
 represents the relationship between keywords and date.
 
-``` python
-corr2 = np.corrcoef(jobs_new['Date'], jobs_new['technical_skill'])
-corr2 = corr2[1,0]
-print(f"Correlation coefficient between required job skills and date: {corr2:.3f}")
-```
-
     Correlation coefficient between required job skills and date: -0.045
 
 Like mentioned above, I was going in expecting to see a strong
@@ -296,38 +140,6 @@ The frequency of these keywords appears to slightly decline over time.
 
 Converting the merged data (youtube data) to long format to help with
 plotting and aggregating by the monthly level to better see trends.
-
-``` python
-import pandas as pd
-
-youtube_long = pd.melt(
-    merged_data_new,
-    id_vars=['publish_date'],
-    value_vars=['has_python', 'has_ai_ml', 'has_frontend', 'has_sql_db'],
-    var_name='Skill',
-    value_name='Flag'
-)
-
-youtube_long['publish_date'] = pd.to_datetime(youtube_long['publish_date'])
-youtube_long['month'] = youtube_long['publish_date'].dt.to_period('M').dt.to_timestamp()
-
-youtube_monthly_trend = (
-    youtube_long
-    .groupby(['month', 'Skill'])['Flag']
-    .sum()
-    .reset_index()
-)
-
-youtube_monthly_trend['month_label'] = (
-    youtube_monthly_trend['month']
-        .dt.to_period('M')
-        .astype(str)
-)
-
-youtube_monthly_trend.head()
-youtube_monthly_trend.rename(columns={'month': 'time', 'Flag': 'Video_Count'}, inplace=True)
-youtube_monthly_trend.head()
-```
 
 <div>
 <style scoped>
@@ -385,38 +197,6 @@ less creators make these front end videos.
 ## Question 4: How does the occurence of key words change over time in job skill descriptions?
 
 Converting Job data to long
-
-``` python
-jobs_long = pd.melt(
-   jobs_new,
-    id_vars=['date'],
-    value_vars=['has_python', 'has_ai_ml', 'has_frontend', 'has_sql_db'],
-    var_name='Skill',
-    value_name='Flag'
-)
-
-jobs_long['date'] = pd.to_datetime(jobs_long['date'])
-
-jobs_long['month'] = jobs_long['date'].dt.to_period('M').dt.to_timestamp()
-
-jobs_monthly_trend = (
-    jobs_long
-    .groupby(['month', 'Skill'])['Flag']
-    .sum()
-    .reset_index()
-)
-
-jobs_monthly_trend['month_label'] = (
-    jobs_monthly_trend['month']
-        .dt.to_period('M')
-        .astype(str)
-)
-
-jobs_monthly_trend.head()
-
-jobs_monthly_trend.rename(columns={'month': 'time', 'Flag': 'Job_Count'}, inplace=True)
-jobs_monthly_trend.head()
-```
 
 <div>
 <style scoped>
@@ -495,7 +275,7 @@ model.summary()
 | Model:            | OLS              | Adj. R-squared:     | -0.002    |
 | Method:           | Least Squares    | F-statistic:        | 0.4487    |
 | Date:             | Wed, 03 Dec 2025 | Prob (F-statistic): | 0.773     |
-| Time:             | 15:32:42         | Log-Likelihood:     | -20886.   |
+| Time:             | 15:34:41         | Log-Likelihood:     | -20886.   |
 | No. Observations: | 1300             | AIC:                | 4.178e+04 |
 | Df Residuals:     | 1295             | BIC:                | 4.181e+04 |
 | Df Model:         | 4                |                     |           |
