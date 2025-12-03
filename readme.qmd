@@ -12,40 +12,6 @@ jupyter: python3
 
 I want to see the most prominent topics mentioned on tech youtube videos whether that be python coding, front end engineering, etc and how this changes with time. Do we see an increase in certain skills over time? Similarly, I want to pull data from dice.com and a technology job board and see how the technical skill keywords I intendified change over time Further, I want to imagine I am starting an education business. Based on the youtube videos and their views, what should I focus my content on to get maximum views and maximum profit.
 
-### Subsection Header
-
-Subsections are useful for breaking ideas down and adding details. This is also likely where you'll want to add code blocks. 
-
-It will be worth noting some chunk options that you might find useful.
-
-If I want to hide code but show output, I can use `echo: false`.
-
-```{python}
-#| echo: false
-2 + 2
-```
-
-If I want to hide output but show code, I can use `results: 'hide'`.
-
-```{python}
-#| results: 'hide'
-2 + 2
-```
-
-Maybe I want to show the code, but not run it. I can use `eval: false`.
-
-```{python}
-#| eval: false
-2 + 2
-```
-
-In most of your chunks, you'll probably want to turn off messages and warnings. You might notice, though, that I did that globally in the execute key in the header above. But if you want to do it in a specific chunk, you can use:
-
-```{python}
-#| messages: false
-#| warnings: false
-```
-
 ## Loading in Packages and Initial Data
 
 ```{python}
@@ -238,8 +204,6 @@ jobs_new  = jobs_new .reset_index(names= ['Date'])
 I solved this by doing a simple correlation test. This returned a matrix so I indexed to find the correlation coefficient in the matrix that represents the relationship between keywords and date.
 
 ```{python}
-#| echo: false
-#| results: 'hide'
 #| #| messages: false
 #| warnings: false
 corr1 = np.corrcoef(merged_data_new['Date'], merged_data_new['technical_skill'])
@@ -256,8 +220,6 @@ Going in I was expecting to see a significiant positive relationship between the
 I solved this by doing a simple correlation test. This returned a matrix so I indexed to find the correlation coefficient in the matrix that represents the relationship between keywords and date.
 
 ```{python}
-#| echo: false
-#| results: 'hide'
 #| #| messages: false
 #| warnings: false
 corr2 = np.corrcoef(jobs_new['Date'], jobs_new['technical_skill'])
@@ -304,7 +266,6 @@ youtube_monthly_trend['month_label'] = (
 
 youtube_monthly_trend.head()
 youtube_monthly_trend.rename(columns={'month': 'time', 'Flag': 'Video_Count'}, inplace=True)
-youtube_monthly_trend.head()
 ```
 
 ### Plotting Youtube Videos
@@ -363,7 +324,6 @@ jobs_monthly_trend['month_label'] = (
 jobs_monthly_trend.head()
 
 jobs_monthly_trend.rename(columns={'month': 'time', 'Flag': 'Job_Count'}, inplace=True)
-jobs_monthly_trend.head()
 ```
 
 ### Plotting Jobs

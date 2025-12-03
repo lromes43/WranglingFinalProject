@@ -12,36 +12,6 @@ Further, I want to imagine I am starting an education business. Based on
 the youtube videos and their views, what should I focus my content on to
 get maximum views and maximum profit.
 
-### Subsection Header
-
-Subsections are useful for breaking ideas down and adding details. This
-is also likely where you’ll want to add code blocks.
-
-It will be worth noting some chunk options that you might find useful.
-
-If I want to hide code but show output, I can use `echo: false`.
-
-    4
-
-If I want to hide output but show code, I can use `results: 'hide'`.
-
-``` python
-2 + 2
-```
-
-    4
-
-Maybe I want to show the code, but not run it. I can use `eval: false`.
-
-``` python
-2 + 2
-```
-
-In most of your chunks, you’ll probably want to turn off messages and
-warnings. You might notice, though, that I did that globally in the
-execute key in the header above. But if you want to do it in a specific
-chunk, you can use:
-
 ## Loading in Packages and Initial Data
 
 ``` python
@@ -102,6 +72,13 @@ I solved this by doing a simple correlation test. This returned a matrix
 so I indexed to find the correlation coefficient in the matrix that
 represents the relationship between keywords and date.
 
+``` python
+corr1 = np.corrcoef(merged_data_new['Date'], merged_data_new['technical_skill'])
+corr1 = corr1[1,0]
+
+print(f"Correlation coefficient between youtube videos and date is: {corr1:.3f}")
+```
+
     Correlation coefficient between youtube videos and date is: 0.119
 
 Going in I was expecting to see a significiant positive relationship
@@ -124,6 +101,12 @@ I solved this by doing a simple correlation test. This returned a matrix
 so I indexed to find the correlation coefficient in the matrix that
 represents the relationship between keywords and date.
 
+``` python
+corr2 = np.corrcoef(jobs_new['Date'], jobs_new['technical_skill'])
+corr2 = corr2[1,0]
+print(f"Correlation coefficient between required job skills and date: {corr2:.3f}")
+```
+
     Correlation coefficient between required job skills and date: -0.045
 
 Like mentioned above, I was going in expecting to see a strong
@@ -140,29 +123,6 @@ The frequency of these keywords appears to slightly decline over time.
 
 Converting the merged data (youtube data) to long format to help with
 plotting and aggregating by the monthly level to better see trends.
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-&#10;    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-&#10;    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-|     | time       | Skill        | Video_Count | month_label |
-|-----|------------|--------------|-------------|-------------|
-| 0   | 2017-09-01 | has_ai_ml    | 0           | 2017-09     |
-| 1   | 2017-09-01 | has_frontend | 0           | 2017-09     |
-| 2   | 2017-09-01 | has_python   | 0           | 2017-09     |
-| 3   | 2017-09-01 | has_sql_db   | 0           | 2017-09     |
-| 4   | 2017-10-01 | has_ai_ml    | 0           | 2017-10     |
-
-</div>
 
 ### Plotting Youtube Videos
 
@@ -181,7 +141,7 @@ plotting and aggregating by the monthly level to better see trends.
 )
 ```
 
-<img src="readme_files/figure-commonmark/cell-12-output-1.png"
+<img src="readme_files/figure-commonmark/cell-9-output-1.png"
 width="480" height="288" />
 
 The results from this plot are no surprise, the AI/ML craze is definetly
@@ -197,29 +157,6 @@ less creators make these front end videos.
 ## Question 4: How does the occurence of key words change over time in job skill descriptions?
 
 Converting Job data to long
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-&#10;    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-&#10;    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-|     | time       | Skill        | Job_Count | month_label |
-|-----|------------|--------------|-----------|-------------|
-| 0   | 2017-11-01 | has_ai_ml    | 20        | 2017-11     |
-| 1   | 2017-11-01 | has_frontend | 859       | 2017-11     |
-| 2   | 2017-11-01 | has_python   | 341       | 2017-11     |
-| 3   | 2017-11-01 | has_sql_db   | 1219      | 2017-11     |
-| 4   | 2017-12-01 | has_ai_ml    | 44        | 2017-12     |
-
-</div>
 
 ### Plotting Jobs
 
@@ -238,7 +175,7 @@ Converting Job data to long
 )
 ```
 
-<img src="readme_files/figure-commonmark/cell-14-output-1.png"
+<img src="readme_files/figure-commonmark/cell-11-output-1.png"
 width="480" height="288" />
 
 This graph shows the relationship between the technical skills outlined
@@ -275,7 +212,7 @@ model.summary()
 | Model:            | OLS              | Adj. R-squared:     | -0.002    |
 | Method:           | Least Squares    | F-statistic:        | 0.4487    |
 | Date:             | Wed, 03 Dec 2025 | Prob (F-statistic): | 0.773     |
-| Time:             | 15:34:41         | Log-Likelihood:     | -20886.   |
+| Time:             | 15:36:52         | Log-Likelihood:     | -20886.   |
 | No. Observations: | 1300             | AIC:                | 4.178e+04 |
 | Df Residuals:     | 1295             | BIC:                | 4.181e+04 |
 | Df Model:         | 4                |                     |           |
