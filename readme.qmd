@@ -49,7 +49,6 @@ In most of your chunks, you'll probably want to turn off messages and warnings. 
 ## Loading in Packages and Initial Data
 
 ```{python}
-#| results: 'hide'
 import pandas as pd
 from plotnine import *
 import numpy as np
@@ -212,6 +211,7 @@ I made a copy of each df, merged_data and jobs. This was done so I could reset t
 
 
 ```{python}
+#| results: 'hide'
 merged_data['technical_skill'] = merged_data['has_python'] + merged_data['has_ai_ml'] + merged_data['has_frontend'] + merged_data['has_sql_db']
 merged_data_new = merged_data.copy()
 merged_data_new = merged_data_new.reset_index(names= ['Date'])
@@ -229,6 +229,7 @@ jobs_new  = jobs_new .reset_index(names= ['Date'])
 I solved this by doing a simple correlation test. This returned a matrix so I indexed to find the correlation coefficient in the matrix that represents the relationship between keywords and date.
 
 ```{python}
+#| results: 'hide'
 corr1 = np.corrcoef(merged_data_new['Date'], merged_data_new['technical_skill'])
 corr1 = corr1[1,0]
 
@@ -243,6 +244,7 @@ Going in I was expecting to see a significiant positive relationship between the
 I solved this by doing a simple correlation test. This returned a matrix so I indexed to find the correlation coefficient in the matrix that represents the relationship between keywords and date.
 
 ```{python}
+#| results: 'hide'
 corr2 = np.corrcoef(jobs_new['Date'], jobs_new['technical_skill'])
 corr2 = corr2[1,0]
 print(f"Correlation coefficient between required job skills and date: {corr2:.3f}")
@@ -255,6 +257,7 @@ Like mentioned above, I was going in expecting to see a strong relationship betw
 Converting the merged data (youtube data) to long format to help with plotting and aggregating by the monthly level to better see trends.
 
 ```{python}
+#| results: 'hide'
 import pandas as pd
 
 youtube_long = pd.melt(
@@ -310,6 +313,7 @@ The results from this plot are no surprise, the AI/ML craze is definetly real an
 Converting Job data to long
 
 ```{python}
+#| results: 'hide'
 jobs_long = pd.melt(
    jobs_new,
     id_vars=['date'],
