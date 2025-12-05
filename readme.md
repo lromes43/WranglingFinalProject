@@ -265,7 +265,7 @@ print(f"Correlation coefficient between required job skills and date: {corr2:.3f
     Correlation coefficient between required job skills and date: -0.045
 
 Plotting Correlation, apparent there is no relationship between
-technical skills and youtube video date.
+technical skills and job posting date.
 
 ``` python
 from plotnine import *
@@ -441,7 +441,7 @@ model.summary()
 | Model:            | OLS              | Adj. R-squared:     | -0.002    |
 | Method:           | Least Squares    | F-statistic:        | 0.4487    |
 | Date:             | Fri, 05 Dec 2025 | Prob (F-statistic): | 0.773     |
-| Time:             | 18:25:31         | Log-Likelihood:     | -20886.   |
+| Time:             | 18:26:39         | Log-Likelihood:     | -20886.   |
 | No. Observations: | 1300             | AIC:                | 4.178e+04 |
 | Df Residuals:     | 1295             | BIC:                | 4.181e+04 |
 | Df Model:         | 4                |                     |           |

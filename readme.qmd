@@ -232,7 +232,7 @@ corr2 = corr2[1,0]
 print(f"Correlation coefficient between required job skills and date: {corr2:.3f}")
 ```
 
-Plotting Correlation, apparent there is no relationship between technical skills and  youtube video date. 
+Plotting Correlation, apparent there is no relationship between technical skills and job posting date. 
 
 ```{python}
 from plotnine import *
